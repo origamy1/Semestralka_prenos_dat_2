@@ -29,6 +29,19 @@ public class DatabaseHealthCheck extends HealthCheck {
     @Override
     @UnitOfWork
     protected Result check() throws Exception {
+//        // Testovanie, či už v databáze neexstuje Household
+//        HouseHold holdDAOById = houseHoldDAO.findById((long) 1);
+//        if (holdDAOById != null) return Result.healthy();
+//        HouseHold houseHold = new HouseHold();
+//        houseHold.setCity("Žilina");
+//        houseHold.setState("Slovakia");
+//        houseHold.setStreet("Okružná");
+//        houseHold.setZip("01001");
+//        houseHold.setContactPerson(
+//                new ContactPerson("Ferko", "Mrkvicka",
+//                        "0907888777", "f.mrkvicka@fri.uniza.sk"));
+//        houseHold = houseHoldDAO.create(houseHold);
+
         return Result.healthy();
     }
 }

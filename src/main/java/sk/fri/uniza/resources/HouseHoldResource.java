@@ -32,6 +32,11 @@ import java.util.List;
 
 )
 
+@Api("/household") // Swagger
+@Path("/household") // Koreňová adresa kolekcie koncových bodov
+// pre prístup k zdrojom domácností // Súčasť JAX-RS
+@Produces(MediaType.APPLICATION_JSON)// Výstupné dáta sú vo forme JSON //JAX-RS
+@Consumes(MediaType.APPLICATION_JSON) //Vstupné dáta sú vo forme JSON //JAX-RS
 public class HouseHoldResource {
 
     private HouseHoldDAO houseHoldDAO;
@@ -59,13 +64,16 @@ public class HouseHoldResource {
     }
 
 
-    public HouseHold createHouseHold(HouseHold houshold) {
-        return null;
+    @POST /*JAX-RS*/
+    @UnitOfWork //Otvorí novú hibernate session // Dropwizard
+    @ApiOperation(value = "Pridanie novej domácnosti")
+    public HouseHold createHouseHold(@Valid HouseHold houshold) {
+        return houshold;
     }
 
     public HouseHold updateHouseHold(
             Long id,
-            HouseHold houshold) {
+            @Valid HouseHold houshold) {
         houshold.setId(id);
         return null;
     }
@@ -76,8 +84,13 @@ public class HouseHoldResource {
     }
 
 
+    @GET //HTTP metóda
+    @Path("{id}") // Jedna vetva hlavnej adresy /household
+    @UnitOfWork //Otvorí novú hibernate session
+    @ApiOperation(value = "Údaje o konkrétnej domácnosti")
     public HouseHold getHouseHold(
-            Long id) {
+            @ApiParam(required = true)
+            @PathParam("id") Long id) {
         return null;
     }
 

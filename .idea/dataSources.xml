@@ -7,7 +7,7 @@
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mariadb://localhost:3306/HouseHoldDB</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="hibernate.cfg.xml/Hibernate" uuid="0d70fb92-5962-4f66-91b7-5b39bf1156ba">
+    <data-source source="LOCAL" name="HouseHoldDB@local" uuid="0d70fb92-5962-4f66-91b7-5b39bf1156ba">
       <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>
@@ -15,7 +15,7 @@
 
 /home/martin/IdeaProjects/WeatherStation/HouseHoldServiceCopy/HouseHoldService/src/main/resources/hibernate.cfg.xml</remarks>
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mariadb://localhost:3306/HouseHoldDB</jdbc-url>
+      <jdbc-url>jdbc:mariadb://localhost:8888/HouseHoldDB</jdbc-url>
     </data-source>
   </component>
 </project>

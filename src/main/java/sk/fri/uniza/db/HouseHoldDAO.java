@@ -18,6 +18,7 @@ public class HouseHoldDAO extends AbstractDAO<HouseHold> {
     }
 
     public HouseHold create(HouseHold houseHold) {
+        //currentSession().save(houseHold);
         return null;
     }
 
