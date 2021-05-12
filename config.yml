@@ -25,7 +25,7 @@ database:
   # Akékoľvek vlastnosti špecifické pre ovládač JDBC:
   # https://docs.jboss.org/hibernate/orm/5.1/userguide/html_single/Hibernate_User_Guide.html#configurations
   properties:
-    charSet: UTF-8
+    charSet: cp1250
     hibernate.dialect: org.hibernate.dialect.MySQL5Dialect # SQL dialekt, ktorému rozumie databáza
     hibernate.show_sql: true # Do konzoly zapíšte všetky príkazy SQL.
     hibernate.format_sql: true # Pretty-print the SQL in the log and console.

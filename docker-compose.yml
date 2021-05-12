@@ -6,13 +6,13 @@ services:
 
   db:
     image: mariadb:latest
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    command: mysqld --character-set-server=cp1250 --collation-server=cp1250_general_ci
     #    restart: always # Automatic start on boot
     environment:
-      - MYSQL_ROOT_PASSWORD= example
-      - MYSQL_DATABASE= HouseHoldDB
-      - MYSQL_USER= householduser
-      - MYSQL_PASSWORD= userpassword
+      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_DATABASE=HouseHoldDB
+      - MYSQL_USER=householduser
+      - MYSQL_PASSWORD=userpassword
 
     ports:
       - 3306:3306

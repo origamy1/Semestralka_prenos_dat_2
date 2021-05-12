@@ -78,10 +78,33 @@ public class HouseHoldServiceApplication
     public void run(final HouseHoldServiceConfiguration configuration,
                     final Environment environment) {
 
+        // Vytvorené objekty na prístup k databáze
+        final HouseHoldDAO houseHoldDAO =
+                new HouseHoldDAO(hibernate.getSessionFactory());
+
         // Vytvorené objekty reprezentujúce REST rozhranie
         environment.jersey()
-                .register(new HouseHoldResource(null, null));
+                .register(new HouseHoldResource(houseHoldDAO, null));
+
+        // Vytvorenie Healthcheck (overenie zdravia aplikácie), ktorý
+        // využijeme na otestovanie databázy
+        final DatabaseHealthCheck databaseHealthCheck =
+                new UnitOfWorkAwareProxyFactory(hibernate)
+                        .create(DatabaseHealthCheck.class,
+                                new Class[]{HouseHoldDAO.class,
+                                        IotNodeDAO.class, FieldDAO.class,
+                                        DataDAO.class},
+                                new Object[]{houseHoldDAO, null,
+                                        null, null
+                                });
+        // Zaregistrovanie Healthcheck
+        environment.healthChecks()
+                .register("databaseHealthcheck", databaseHealthCheck);
+        // Spustenie všetkých health kontrol
+        environment.healthChecks().runHealthChecks();
 
     }
+
+
 
 }

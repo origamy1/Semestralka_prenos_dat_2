@@ -68,36 +68,54 @@ public class HouseHoldResource {
     @UnitOfWork //Otvorí novú hibernate session // Dropwizard
     @ApiOperation(value = "Pridanie novej domácnosti")
     public HouseHold createHouseHold(@Valid HouseHold houshold) {
-        return houshold;
+        return houseHoldDAO.create(houshold);
     }
 
+    @PUT /*JAX-RS*/
+    @Path("{id}") /*JAX-RS*/
+    @UnitOfWork //Otvorí novú hibernate session // Dropwizard
+    @ApiOperation(value = "Úprava existujúcej domácnosti")
     public HouseHold updateHouseHold(
-            Long id,
+            @ApiParam(value = "ID", required = true) @PathParam("id") Long id,
             @Valid HouseHold houshold) {
         houshold.setId(id);
-        return null;
+        return houseHoldDAO.update(houshold);
     }
 
 
+    @GET
+    @UnitOfWork //Otvorí novú hibernate session
+    @ApiOperation(value = "Zoznam všetkých domácnosti")
     public List<HouseHold> listHouseHold() {
-        return null;
+        return houseHoldDAO.findAll();
     }
-
 
     @GET //HTTP metóda
     @Path("{id}") // Jedna vetva hlavnej adresy /household
     @UnitOfWork //Otvorí novú hibernate session
     @ApiOperation(value = "Údaje o konkrétnej domácnosti")
     public HouseHold getHouseHold(
-            @ApiParam(required = true)
-            @PathParam("id") Long id) {
-        return null;
+            @ApiParam(value = "ID", required = true) @PathParam("id") Long id) {
+        return houseHoldDAO.findById(id);
     }
 
 
+    @GET
+    @Path("filter")
+    @UnitOfWork //Otvorí novú hibernate session
+    @ApiOperation(value = "Vyfiltrovaný zoznam domácnosti")
     public List<HouseHold> filterHouseHold(
-            FilterEnum filter,
-            String value) {
+            @QueryParam("filter") FilterEnum filter,
+            @QueryParam("value") String value) {
+
+        switch (filter) {
+            case zip:
+                return houseHoldDAO.findByZip(value);
+            case firstName:
+                return houseHoldDAO.findByFirstName(value);
+            case lastName:
+                return houseHoldDAO.findByLastName(value);
+        }
 
         return null;
     }

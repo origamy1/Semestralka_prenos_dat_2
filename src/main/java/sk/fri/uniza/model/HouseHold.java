@@ -5,16 +5,30 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
-
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.Set;
 
+@org.hibernate.annotations.NamedQueries({
+        @org.hibernate.annotations.NamedQuery(name = "HouseHold_findByZip",
+                query = "from HouseHold where zip = :zipNo"),
+        @org.hibernate.annotations.NamedQuery(
+                name = "HouseHold_findByFirstName",
+                query = "from HouseHold where firstname = :name"),
+        @org.hibernate.annotations.NamedQuery(name = "HouseHold_findLastName",
+                query = "from HouseHold where lastname = :name"),
+        @org.hibernate.annotations.NamedQuery(name = "HouseHold_findAll",
+                query = "from HouseHold"),
 
+})
+@Entity
 public class HouseHold {
-
-    @ApiModelProperty(hidden = true) // Swagger nebude zobrazovať atribút
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @ApiModelProperty(accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+    // Swagger nebude zobrazovať atribút
     private Long id;
     @NotEmpty
     @ApiModelProperty(example = "Univerzitná") // Príklad pre swagger doku.
@@ -34,10 +48,12 @@ public class HouseHold {
 
     @JsonIgnore // Ignorovanie danej premenej z pohladu Serializacie do
     // Objektu JSON.Gneroval by sa obrovský JSON a dochádzalo by aj k zacykleniu
+    @Transient
     private Set<AbstractData> data;
 
     @JsonIgnore // Ignorovanie danej premenej z pohladu Serializacie do
     // Objektu JSON.Gneroval by sa obrovský JSON a dochádzalo by aj k zacykleniu
+    @Transient
     private Collection<IotNode> iotNode;
 
     public Long getId() {

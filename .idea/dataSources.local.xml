@@ -2,15 +2,19 @@
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="IU-211.7142.45">
     <data-source name="HouseHoldDB@localhost" uuid="b9f56c69-b316-446d-b54d-3700372ffc21">
-      <database-info product="MariaDB" version="10.4.12-MariaDB-1:10.4.12+maria~bionic" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="2.6.0" dbms="MARIADB" exact-version="10.4.12" exact-driver-version="2.6">
+      <database-info product="MariaDB" version="10.5.9-MariaDB-1:10.5.9+maria~focal" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="2.6.0" dbms="MARIADB" exact-version="10.5.9" exact-driver-version="2.6">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
+      <user-name>householduser</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema" qname="@" />
+          <node kind="schema">
+            <name qname="@" />
+            <name qname="HouseHoldDB" />
+          </node>
         </introspection-scope>
       </schema-mapping>
     </data-source>
@@ -20,7 +24,7 @@
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
-      <user-name>householduser</user-name>
+      <user-name>mysql</user-name>
       <schema-mapping>
         <introspection-scope>
           <node kind="schema" qname="@" />
