@@ -14,10 +14,10 @@ import sk.fri.uniza.db.FieldDAO;
 import sk.fri.uniza.db.HouseHoldDAO;
 import sk.fri.uniza.db.IotNodeDAO;
 import sk.fri.uniza.health.DatabaseHealthCheck;
+import sk.fri.uniza.health.DeleteHealthCheck;
 import sk.fri.uniza.model.*;
 import sk.fri.uniza.resources.FieldResource;
 import sk.fri.uniza.resources.HouseHoldResource;
-import sk.fri.uniza.resources.IoTNodeResource;
 
 public class HouseHoldServiceApplication
         extends Application<HouseHoldServiceConfiguration> {
@@ -81,27 +81,45 @@ public class HouseHoldServiceApplication
         // Vytvorené objekty na prístup k databáze
         final HouseHoldDAO houseHoldDAO =
                 new HouseHoldDAO(hibernate.getSessionFactory());
+        final DataDAO dataDAO =
+                new DataDAO(hibernate.getSessionFactory());
+        final FieldDAO fieldDAO =
+                new FieldDAO(hibernate.getSessionFactory());
 
         // Vytvorené objekty reprezentujúce REST rozhranie
         environment.jersey()
-                .register(new HouseHoldResource(houseHoldDAO, null));
+                .register(new HouseHoldResource(houseHoldDAO, dataDAO));
+        environment.jersey()
+                .register(new FieldResource(fieldDAO));
+        environment.jersey()
+                .register(new DateParameterConverterProvider());
 
         // Vytvorenie Healthcheck (overenie zdravia aplikácie), ktorý
         // využijeme na otestovanie databázy
+        UnitOfWorkAwareProxyFactory unitOfWorkAwareProxyFactory =
+                new UnitOfWorkAwareProxyFactory(hibernate);
         final DatabaseHealthCheck databaseHealthCheck =
-                new UnitOfWorkAwareProxyFactory(hibernate)
+                unitOfWorkAwareProxyFactory
                         .create(DatabaseHealthCheck.class,
                                 new Class[]{HouseHoldDAO.class,
                                         IotNodeDAO.class, FieldDAO.class,
                                         DataDAO.class},
                                 new Object[]{houseHoldDAO, null,
-                                        null, null
+                                        fieldDAO, dataDAO
                                 });
+        final DeleteHealthCheck deleteHealthCheck =
+                unitOfWorkAwareProxyFactory
+                        .create(DeleteHealthCheck.class,
+                                FieldDAO.class,
+                                fieldDAO);
         // Zaregistrovanie Healthcheck
         environment.healthChecks()
                 .register("databaseHealthcheck", databaseHealthCheck);
+        environment.healthChecks()
+                .register("deleteHealthcheck", deleteHealthCheck);
         // Spustenie všetkých health kontrol
-        environment.healthChecks().runHealthChecks();
+        environment.healthChecks().runHealthCheck("databaseHealthcheck");
+        environment.healthChecks().runHealthCheck("deleteHealthcheck");
 
     }
 

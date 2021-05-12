@@ -16,9 +16,9 @@ import java.util.Set;
                 query = "from HouseHold where zip = :zipNo"),
         @org.hibernate.annotations.NamedQuery(
                 name = "HouseHold_findByFirstName",
-                query = "from HouseHold where firstname = :name"),
+                query = "from HouseHold where contactPerson.firstName = :name"),
         @org.hibernate.annotations.NamedQuery(name = "HouseHold_findLastName",
-                query = "from HouseHold where lastname = :name"),
+                query = "from HouseHold where contactPerson.lastName = :name"),
         @org.hibernate.annotations.NamedQuery(name = "HouseHold_findAll",
                 query = "from HouseHold"),
 
@@ -46,10 +46,13 @@ public class HouseHold {
     @Valid
     private ContactPerson contactPerson;
 
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "houseHold")
     @JsonIgnore // Ignorovanie danej premenej z pohladu Serializacie do
-    // Objektu JSON.Gneroval by sa obrovský JSON a dochádzalo by aj k zacykleniu
-    @Transient
+    // objektu JSON. Generoval by sa obrovský JSON a dochádzalo by aj k
+    // zacykleniu
     private Set<AbstractData> data;
+
 
     @JsonIgnore // Ignorovanie danej premenej z pohladu Serializacie do
     // Objektu JSON.Gneroval by sa obrovský JSON a dochádzalo by aj k zacykleniu
@@ -114,7 +117,10 @@ public class HouseHold {
 
     @Override
     public boolean equals(Object o) {
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HouseHold houseHold = (HouseHold) o;
+        return id != null ? id.equals(houseHold.id) : houseHold.id == null;
     }
 
     @Override
