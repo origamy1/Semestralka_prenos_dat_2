@@ -10,17 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@org.hibernate.annotations.NamedQueries({
-        @org.hibernate.annotations.NamedQuery(name = "AbstractData_findData",
-                query = "from AbstractData where household_id = :hhId AND " +
-                        "field_id = :fieldId"),
-        @org.hibernate.annotations.NamedQuery(name =
-                "AbstractData_findDataFromTo",
-                query = "from AbstractData where household_id = :hhId AND " +
-                        "field_id = :fieldId AND dateTime BETWEEN :from" +
-                        " AND :to ORDER BY dateTime ASC"),
-})
-@Entity
+
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -35,6 +25,17 @@ import java.time.LocalDateTime;
 @ApiModel(value = "Data", discriminator = "type", subTypes = {DataDouble.class
         , DataInteger.class,
         DataString.class})
+@org.hibernate.annotations.NamedQueries({
+        @org.hibernate.annotations.NamedQuery(name = "AbstractData_findData",
+                query = "from AbstractData where household_id = :hhId AND " +
+                        "field_id = :fieldId"),
+        @org.hibernate.annotations.NamedQuery(name =
+                "AbstractData_findDataFromTo",
+                query = "from AbstractData where household_id = :hhId AND " +
+                        "field_id = :fieldId AND dateTime BETWEEN :from" +
+                        " AND :to ORDER BY dateTime ASC"),
+})
+@Entity
 public abstract class AbstractData<T extends Object> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
