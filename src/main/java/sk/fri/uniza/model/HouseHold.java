@@ -16,9 +16,9 @@ import java.util.Set;
                 query = "from HouseHold where zip = :zipNo"),
         @org.hibernate.annotations.NamedQuery(
                 name = "HouseHold_findByFirstName",
-                query = "from HouseHold where contactPerson.firstName = :name"),
-        @org.hibernate.annotations.NamedQuery(name = "HouseHold_findLastName",
-                query = "from HouseHold where contactPerson.lastName = :name"),
+                query = "from HouseHold where firstname = :name"),
+        @org.hibernate.annotations.NamedQuery(name = "HouseHold_findByLastName",
+                query = "from HouseHold where lastname = :name"),
         @org.hibernate.annotations.NamedQuery(name = "HouseHold_findAll",
                 query = "from HouseHold"),
 
@@ -54,9 +54,10 @@ public class HouseHold {
     private Set<AbstractData> data;
 
 
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "houseHold",cascade = CascadeType.REMOVE)
     @JsonIgnore // Ignorovanie danej premenej z pohladu Serializacie do
     // Objektu JSON.Gneroval by sa obrovský JSON a dochádzalo by aj k zacykleniu
-    @Transient
     private Collection<IotNode> iotNode;
 
     public Long getId() {

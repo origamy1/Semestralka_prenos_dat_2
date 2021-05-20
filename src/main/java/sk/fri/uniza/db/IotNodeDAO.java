@@ -2,11 +2,16 @@ package sk.fri.uniza.db;
 
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
+import sk.fri.uniza.model.Field;
+import sk.fri.uniza.model.HouseHold;
 import sk.fri.uniza.model.IotNode;
 
+import javax.ws.rs.WebApplicationException;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
-public class IotNodeDAO extends AbstractDAO<IotNodeDAO> {
+public class IotNodeDAO extends AbstractDAO<IotNode> {
     /**
      * Creates a new DAO with a given session provider.
      *
@@ -21,22 +26,32 @@ public class IotNodeDAO extends AbstractDAO<IotNodeDAO> {
         return iotNode;
     }
 
+    public IotNode create(IotNode iotNode, Long id) {
+        final HouseHold houseHold = currentSession().get(HouseHold.class, id);
+        if(houseHold == null){
+            throw new WebApplicationException("Priradene zle ID, alebo prázdny household");
+
+
+        }
+        iotNode.setHouseHold(houseHold);
+        currentSession().save(iotNode);
+        return iotNode;
+    }
+
     public IotNode findById(Long id) {
-        //TODO Doplniť
-        return null;
+        return get(id);
     }
 
     public IotNode update(IotNode iotNode) {
-        //TODO Doplniť
-        return null;
+        return (IotNode) currentSession().merge(iotNode);
     }
 
     public List<IotNode> findByHouseHold(Long houseHoldId) {
-        //TODO Doplniť
-        return null;
+        return list(namedQuery("findBy_Household_Id")
+                .setParameter("HouseHold_id", houseHoldId));
     }
 
     public List<IotNode> allIotNodes() {
-        return null;
+        return list(namedQuery("find_All_nodes"));
     }
 }
