@@ -54,6 +54,13 @@ public class DatabaseHealthCheck extends HealthCheck {
         windSpeed.setDescripton("Rýchlosť vetra");
         windSpeed = fieldDAO.create(windSpeed);
 
+
+        Field bateryLife = new Field();
+        bateryLife.setName("bateryLife"); //NativeId - musí sa vytvoriť manuálne
+        bateryLife.setUnit("%");
+        bateryLife.setDescripton("batéria percent");
+        bateryLife = fieldDAO.create(bateryLife);
+
         Field weather = new Field();
         weather.setName("weather"); //NativeId - musí sa vytvoriť manuálne
         weather.setDescripton("Aktuálne počasie");
@@ -79,10 +86,17 @@ public class DatabaseHealthCheck extends HealthCheck {
         dataString.setField(weather);
         dataString.setHouseHold(houseHold);
 
+        DataInteger  dataIntegerA = new DataInteger();
+        dataIntegerA.setValue(5);
+        dataIntegerA.setDateTime(LocalDateTime.now());
+        dataIntegerA.setField(bateryLife);
+        dataIntegerA.setHouseHold(houseHold);
+
+
         dataDAO.create(dataDouble);
         dataDAO.create(dataInteger);
         dataDAO.create(dataString);
-
+        dataDAO.create(dataIntegerA);
         return Result.healthy();
     }
 }
